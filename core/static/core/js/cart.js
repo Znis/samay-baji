@@ -201,8 +201,23 @@ if (tommm < 10) {
 var mindate = minDate.getFullYear()+'-'+(minmm)+'-'+(mindd);
 var maxdate = maxDate.getFullYear()+'-'+(maxmm)+'-'+(maxdd);
 var tomdate = tomDate.getFullYear()+'-'+(tommm)+'-'+(tomdd);
-var toddate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+if(today.getMonth()+1 < 10){
+  var toddate = today.getFullYear()+'-0'+(today.getMonth()+1)+'-'+today.getDate();
+
+}else{
+  var toddate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+}
+
+if(today.getDate() < 10){
+  var toddate = today.getFullYear()+'-'+(today.getMonth()+1)+'-0'+today.getDate();
+
+}else{
+  var toddate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+}
+
 var deftime = hr +':'+ min;
+
 
 
 
@@ -453,7 +468,7 @@ $("#preorder-div").animate({
   });
 }
 
-  }else{
+  }else if(checkboxId == "today"){
     document.getElementById("preorder-date").setAttribute("min",toddate);
     document.getElementById("preorder-date").setAttribute("value",toddate);
     document.getElementById("preorder-date").setAttribute("max",toddate);
@@ -600,7 +615,8 @@ function checkoutFormValidation(){
     span.setAttribute("style","font-size: 1.2rem; color:#fc0330; text-align:left; padding-top:0.5rem;");
     span.innerHTML= "Enter A Valid Time!";
     inputNode.parentNode.insertBefore(span, inputNode.nextSibling);
-    check = false;
+    check=false;
+   
   } else{
     document.getElementById('order-time').style.border = null;
     $('#order-time').next("span").remove();
