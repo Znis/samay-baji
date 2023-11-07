@@ -1,0 +1,213 @@
+
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+   
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+    <meta name="google-signin-client_id" content="354492603847-tco131bqrm2n4f5q0q4dl38t14lc4sg1.apps.googleusercontent.com">
+    
+    <title>{% block title %}{% endblock %}</title>
+    <!-- add icon link -->
+    <link rel="icon" href="{% static 'core/images/title-logo.png' %}" type="image/x-icon" />
+    <!-- aos css cdn link  -->
+   
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+   
+   
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    />
+    <!-- google fonts cdn link  -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500&family=Roboto:wght@100;300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- font awesome cdn link  -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    />
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}" />
+  </head>
+
+  <body>
+
+    <div id="fb-root"></div>
+
+    <div class="popup" id="popup-1">
+      <div class="content">
+        <button class="close" onclick="togglePopup()"><i class="fas fa-times"></i></button>
+        
+        
+
+
+
+
+        <h1>Sign in</h1>
+
+        <form id = "login-form" method="POST" action="/login/">
+          {% csrf_token %}
+          <label for="email">Email</label>
+          <input type="email" maxlength="50" name = "email-field" id="email-field" placeholder="Email" class="inputbox" required />
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password-field"
+            name="password-field"
+            placeholder="Password"
+            class="inputbox"
+            
+            pattern="(.{6,})"
+            title="Must contain at least 6 or more characters" required
+
+           > <span toggle="#password-field" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span></input>
+           <input type="checkbox" id="keepmeloggedin" name="keepmeloggedin" value="yes">
+  <label class="checkbox" for="keepmeloggedin"> Keep me signed in</label>
+          
+        
+          
+          <a href="{% url 'core:core-signup'%}" style="float: right;">Forgot password?</a>
+          <input type="submit" value="Sign In" class="btn signIn" />
+        </form>
+        <h3><span>OR</span></h3>
+        <div class="container">
+        <div id="my-signin2" class="g-signin2" data-longtitle="true" ></div>
+       
+      
+        <div class="fb-login-button"  data-width="200" data-size="large"  data-button-type="login_with" 
+        data-layout="default" data-auto-logout-link="true" data-use-continue-as="false"  style="margin-left:1.1rem;"></div>
+      </div>
+
+
+
+
+{% block signupshowhide %} {% endblock %}
+       
+      </div>
+    </div>
+
+    <button
+      onclick="topFunction()"
+      id="myBtn"
+      class="fas fa-angle-double-up"
+      title="Go to top"
+    ></button>
+    <!-- header section starts  -->
+    <header>
+      <a href="/" class="logo"
+        ><img
+          src="{% static 'core/images/website-logo.png' %}"
+          title="website logo"
+          alt="website logo"
+      /></a>
+      <div id="menu-bar" class="fas fa-bars"></div>
+      <nav class="navbar">
+        <ul>
+          <li><a class="active" href="/">home</a></li>
+
+          <li><a href="/#menu">menu</a></li>
+          <li><a href="/#about">about</a></li>
+          <li><a href="{% url 'core:core-order'%}">order</a></li>
+{% block userlog %}{% endblock %}
+        </ul>
+      </nav>
+  
+    </header>
+        
+          {% block content %}
+          {% endblock %}
+
+
+
+
+          {% for details in homepageDetail %}
+          <div class="gradient sign-up">
+          <div class="footer">
+            <div class="box-container">
+              <div class="box">
+                <h3>contact info</h3>
+                
+            
+     
+                <p><i class="fas fa-map-marker-alt"></i>&nbsp{{details.contact_address}}</p>
+                <p><i class="fas fa-envelope"></i>&nbsp{{details.contact_email}}</p>
+                <p><i class="fas fa-phone"></i>&nbsp{{details.contact_num1}}</p>
+                <p><i class="fas fa-phone"></i>&nbsp{{details.contact_num2}}</p>
+              </div>
+              
+               
+              <div class="box">
+                <h3>quick links</h3>
+                <a href="#">home</a>
+    
+                <a href="#menu">menu</a>
+                <a href="#about">about</a>
+    
+                <a href="{% url 'core:core-order'%}">order</a>
+              </div>
+    
+              <div class="box">
+                <h3>Legal</h3>
+    
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+              </div>
+              <div class="box">
+                <h3>follow us</h3>
+    
+                <a href="#">facebook</a>
+                <a href="#">twitter</a>
+              </div>
+            </div>
+    
+            <h1 class="credit">
+              created by <span>Samay Baji Team</span> all rights reserved.
+            </h1>
+          </div>
+        </div>
+        {% endfor %}
+        <!-- footer section ends -->
+       
+           <!-- google Oauth and facebook Oauth -->
+        <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+           
+    
+        <!-- aos js cdn link  -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    
+        <!-- jquery cdn link  -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDn2HTLr61bq73MhhdNJw-zE-EvzwgUZgY&callback=initMap&libraries=&v=weekly"
+    async></script>
+    
+ 
+
+
+ 
+        <!-- custom js file link  -->
+        <script type="text/javascript" src="{% static 'core/js/script.js' %}"></script>
+        <script src="{% static 'core/js/cart.js' %}"></script>
+        <!-- initializing aos  -->
+    
+        <script>
+          AOS.init({
+            delay: 300,
+            duration: 800,
+          });
+        </script>
+      </body>
+    </html>

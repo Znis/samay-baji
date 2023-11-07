@@ -1,0 +1,206 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Samay Baji{% endblock %}
+{% block content %}
+{% block signupshowhide %}<p>Don't have an account? &nbsp<a href="{% url 'core:core-signup'%}" style="display: inline-block;">Sign Up</a></p>{% endblock %}
+{% block userlog %}
+          {% if user.is_authenticated %}
+         
+
+<div class="btn-group">
+  <button type="button" id = "dropdown-btn" class="btn btn-active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-user" aria-hidden="true"></i>&nbsp
+{{user.email}}
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="/history/">Order History</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="/logout/">Logout</a>
+  </div>
+</div>
+         
+          {% else %}  
+          <button class="btn" id="loginBtn" onclick="togglePopup(),topFunction()">
+            Login
+          </button>  
+          <a class="btn register" id="registerBtn" href="{% url 'core:core-signup'%}">
+            Register
+          </a>
+      {% endif %}
+          {% endblock %}
+         
+        </ul>
+      </nav>
+  
+    </header>
+  
+    <!-- header section ends -->
+  
+
+    {% for details in homepageDetail %}
+    <!-- home section starts  -->
+
+
+            
+    {% if messages %}
+   
+    <div class = "messageBox"  id = "messageBox-1" >
+    <div class = " content" id ="messageBox-content">
+      <button class="close" id = "messageBox-cross-btn" style = "margin-top:-1rem; margin-right:-1rem; ; border: 0.2rem var(--brown) solid; color:#111 !important; border-radius:50%; padding:0.7rem 0.9rem; font-size: 1.5rem;"><i class="fas fa-times"></i></button>
+        {% for message in messages %}
+        <h1 style = "margin-top:-1rem; margin-bottom: 2rem; font-size: 3.2rem;">{{ message.tags }} &nbsp
+          {% if message.tags == "success" %}
+          <i style = "color: rgb(57, 255, 47);" class="fa fa-check" aria-hidden="true"></i>
+          {% endif %}
+          {% if message.tags == "error" %}
+          <i style = "color: red;" class="fa fa-times" aria-hidden="true"></i>
+          {% endif %}
+        </h1>
+        <p style = "font-size: 1.6rem;">{{message|safe}}</p>
+        {% endfor %}
+      </div>
+       
+       
+       
+    </div>
+    {% endif %}
+
+    <section class="home" id="home">
+
+   
+
+
+
+      <div class="content" data-aos="fade-right">
+        <h3>{{details.main_title}}</h3>
+        <p>
+          {{details.main_paragraph|safe}}
+        
+        </p>
+        <a href="{% url 'core:core-order'%}"><button class="btn">Click here to order</button></a>
+      </div>
+
+      <div class="image" data-aos="fade-up">
+        <img
+          src="{{details.main_image.url}}" 
+          alt="a plate of samay baji"
+          title="samay baji"
+        />
+      </div>
+    </section>
+    <!-- home section ends-->
+    <!-- menu section starts  -->
+    <section class="menu" id="menu">
+      <h1 class="heading">our newari <span>menu</span></h1>
+      <div class="box-container">
+    {% include "core/menuList.html" %}
+  </div>
+  </section>
+
+    <!-- menu section ends -->
+    <!-- about section starts  -->
+
+    <section class="about" id="about">
+      <div class="image" data-aos="fade-right">
+        <!-- <img
+        src="{{details.aboutUs_image}}"
+        alt="samay baji image"
+        title="about us"
+      /> -->
+      </div>
+
+      <div class="content" data-aos="fade-left">
+        <h3>{{details.aboutUs_title}}</h3>
+        <p>
+          <!-- {{details.aboutUs_paragraph}} -->
+          Samay Baji is the newly established and the only kitchen in Nepal who delivers the fresh and original newari traditional dishes like Samay baji set, Tho(rice beer), yomari etc right at your doorsteps. We aim to deliver the original yet high quality food to our customers within short time period and at unbeatable price.</p>
+
+<p>If you have any suggestion or feedback for us, please fill out the form given below or, give us a call or an email. We would really love and appreciate the feedback from all our customers. Thank you!
+        </p>
+        <a href="#"><button class="btn">Learn More</button></a>
+      </div>
+    </section>
+
+    <!-- about section ends -->
+    <!-- feedback section starts  -->
+
+    <section class="feedback" id="feedback">
+      <h3>Feedback form</h3>
+      <form class="diff1" action="/feedback/" id = "feedback-form" method = "POST" data-aos="fade-right">
+        {% csrf_token %}
+      <div class="row">
+        
+        <div class="container" style = " padding:2rem;">
+         
+           
+            <input type="text"  placeholder="Your Name" title = "It can contain only Alphabets!" pattern="[a-z A-Z ]{2,25}" name = "feedback-name" class="inputbox" required />
+            
+            <input type="email" placeholder="Your Email" maxlength="50" class="inputbox" name = "feedback-email" required/>
+            <button type="submit"  style = "margin-top:1rem; width: 16rem;" class="btn" >Submit</button>
+          
+        </div>
+
+        <div class="container" style = " padding:2rem;">
+          
+            <textarea
+              name="feedback-text"
+              id="feedback-text"
+              cols="30"
+              rows="7"
+              class="inputbox"
+              placeholder="Message"
+              maxlength="400"
+              
+              required
+            ></textarea>
+            
+          
+        </div>
+    
+      </div>
+    </form>
+    </section>
+    <!-- feedback section ends-->
+    <!-- footer and app download section starts  -->
+    
+      <section class="download-app" id="download-app">
+        <div class="box-container">
+          <div class="box1" data-aos="fade-right">
+            <h3>{{details.download_title}}</h3>
+            <p>{{details.download_subtitle}}</p>
+          </div>
+          <div class="box" data-aos="fade-right">
+            <img
+              class="android"
+              src="{% static 'core/images/android.png' %}"
+              alt="download on android"
+            />
+            <img
+              class="ios"
+              data-aos="fade-left"
+              src="{% static 'core/images/ios.png' %}"
+              alt="download on ios"
+            />
+          </div>
+        </div>
+
+        <div class="image" data-aos="fade-left">
+            <!-- <img
+        src="{{details.download_phoneimg}}"
+        alt="phone image"
+        title="download app"
+      /> -->
+        </div>
+
+      </section>
+
+
+      
+    
+     
+      
+
+
+      {% endfor %}
+      {% endblock %}

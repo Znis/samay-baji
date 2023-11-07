@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Order{% endblock %}
+{% block signupshowhide %} <p>Don't have an account? &nbsp<a href="{% url 'core:core-signup'%}" style="display: inline-block;">Sign Up</a></p>{% endblock %}
+          {% block userlog %}
+          {% if user.is_authenticated %}
+         
+
+          <div class="btn-group">
+            <button type="button" id = "dropdown-btn" class="btn btn-active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-user" aria-hidden="true"></i>&nbsp
+          {{user.email}}
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/history/">Order History</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/logout/">Logout</a>
+            </div>
+          </div>
+                   
+                    {% else %}  
+                    <button class="btn" id="loginBtn" onclick="togglePopup(),topFunction()">
+                      Login
+                    </button>  
+                    <a class="btn register" id="registerBtn" href="{% url 'core:core-signup'%}">
+                      Register
+                    </a>
+                {% endif %}
+          <button class="cartBtn" id="cartBtn" onclick="toggleCartBtn() ">
+            <i class="fas fa-cart-arrow-down"></i>
+           
+          </button>
+         {% endblock %}
+      
+    <!-- header section ends -->
+{% block content %}
+    <div class="menu order">
+      <div  style="width: 88% !important"  class="box-container" id="order">
+        <h1 class="heading">our newari <span>menu</span></h1>
+        <div class="box-container">{% include "core/menuList.html" %}</div>
+      </div>
+
+      <!--order section ends-->
+      <!--checkout section starts-->
+      
+      <form action="/core/checkout/" id="post-form" method="POST" novalidate>
+        {% csrf_token %}
+
+        <div class="box-container" id="checkout-box">
+          <h1 class="heading">Item <span>Delivery</span></h1>
+          <br />
+
+          <h2 id="checkout-confirm-hline"></h2>
+          <div class="box-container delivery">
+            <div class="box-container in1">
+              <input type = "hidden" name = "item-json" id = "item-json">
+              <input type = "hidden" name = "amt-total" id = "amt-total">
+              <h2>Method</h2>
+            </div>
+            <div class="box-container in2">
+              <div class="box-container name" id="method-id">
+                <input
+                  style="margin-top: 0.1rem; width: 1.8rem; height: 1.8rem"
+                  type="radio"
+                  id="delivery"
+                  name="method"
+                  value="delivery"
+                  required
+                />
+                 
+                <label for="delivery">Delivery</label>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                 
+                <input
+                  style="margin-top: 0.1rem; width: 1.8rem; height: 1.8rem"
+                  type="radio"
+                  id="pickup"
+                  name="method"
+                  value="pickup"
+                />
+                  <label for="pickup">Pickup</label>
+              </div>
+            </div>
+          </div>
+          <h2 id="checkout-confirm-hline"></h2>
+    
+          <div class="box-container delivery">
+            <div class="box-container in1">
+              <h2>Contact details</h2>
+            </div>
+            <div class="box-container in2">
+              <div class="box-container name">
+                <div class="box-container in2" id="zz">
+                  <label for="fname">First Name</label>
+
+                  <input
+                    id="fname"
+                    type="fname"
+                    name = "fname"
+                    placeholder="First Name"
+                    class="inputbox ip-box"
+                    value = {{user.email|truncatewords:1|capfirst}}
+                    required
+                  />
+                </div>
+                <div class="box-container in2">
+                  <label for="lname">Last Name</label>
+
+                  <input
+                    id="lname"
+                    type="lname"
+                    name = "lname"
+                    placeholder="Last Name"
+                    class="inputbox ip-box"
+                    required
+                  />
+                </div>
+              </div>
+
+              <label style="margin-top: 0.5rem" for="email">Email</label>
+              <input
+                type="email"
+                id="email-field1"
+                name = "email"
+                placeholder="Email"
+                class="inputbox"
+                value = {{user.username}}
+                required
+              />
+              <label for="tel-number">Phone number</label>
+              <input
+                id="phone"
+                class="inputbox"
+                name="phone"
+                placeholder="Mobile Number"
+                type="tel"
+                value = {{user.last_name}}
+                required
+              />
+            </div>
+         
+          </div>
+          <h2 id="checkout-confirm-hline"></h2>
+          <div class="box-container delivery">
+            <div class="box-container in1">
+              <h2>Payment</h2>
+            </div>
+            <div class="box-container in2">
+              <div class="box-container name" id="paymentdiv-id">
+                <input
+                  style="margin-top: 0.1rem; width: 1.8rem; height: 1.8rem"
+                  type="radio"
+                  id="cod"
+                  name="payment"
+                  value="cod"
+                  required
+                />
+                 
+                <label for="cod">Cash On Delivery</label>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                 
+                <input
+                  style="margin-top: 0.1rem; width: 1.8rem; height: 1.8rem"
+                  type="radio"
+                  id="esewa"
+                  name="payment"
+                  value="esewa"
+                />
+                 
+                <label for="esewa">Esewa</label
+                >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <input
+                  style="margin-top: 0.1rem; width: 1.8rem; height: 1.8rem"
+                  type="radio"
+                  id="khalti"
+                  name="payment"
+                  value="khalti"
+                />
+                  <label for="khalti">Khalti</label>
+              </div>
+            </div>
+          </div>
+          <h2 id="checkout-confirm-hline"></h2>
+
+          <div class="box-container delivery">
+            <div class="box-container in1">
+              <h2>Delivery Time and note to driver</h2>
+            </div>
+            <div class="box-container in2">
+              <div class="box-container name" id="timediv-id">
+                <input
+                  style="margin-top: 0.1rem; width: 1.8rem; height: 1.8rem"
+                  type="radio"
+                  id="today"
+                  name="time"
+                  value="today"
+                  onclick="preorderChecked('today')"
+                  required
+                />
+                 
+                <label for="today">Today</label>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                 
+                <input
+                  style="margin-top: 0.1rem; width: 1.8rem; height: 1.8rem"
+                  type="radio"
+                  id="tommorow"
+                  name="time"
+                  value="tommorow"
+                  onclick="preorderChecked('tommorow')"
+                />
+                 
+                <label for="tommorow">Tommorow</label>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <input
+                  style="margin-top: 0.1rem; width: 1.8rem; height: 1.8rem"
+                  type="radio"
+                  id="preorder"
+                  name="time"
+                  value="preorder"
+                  onclick="preorderChecked('preorder')"
+                />
+                  <label for="preorder">Pre-order</label>
+              </div>
+              <div
+                class="box-container in2"
+                id="preorder-div"
+                style="display: none; height: 0px"
+              >
+                <div
+                  class="box-container in2"
+                  style="margin: 0rem !important"
+                >
+                    <label for="preorder-date">Enter Date For Pre-order:</label>
+                  <input
+                    type="date"
+                    class="inputbox ip-box"
+                    id="preorder-date"
+                    name="preorder-date"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="box-container in2">
+                <div
+                  class="box-container in2"
+                  style="margin: 2rem 0rem !important"
+                  id="time"
+                >
+                  <label for="order-time">Time</label>
+
+                  <input
+                    id="order-time"
+                    name = "order-time"
+                    type="time"
+                    min="09:00"
+                    max="21:00"
+                    class="inputbox ip-box"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="box-container in2">
+                <div class="box-container in2" id="note-driver">
+                  <label for="note-driver">Note to driver (Optional)</label>
+
+                  <textarea
+                    name="note-to-driver"
+                    id="note-to-driver"
+                    cols="44"
+                    rows="7"
+                    class="inputbox"
+                    placeholder="Message"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="checkout-confirm-hline"></h2>
+
+          <div class="box-container delivery">
+            <div class="box-container in1">
+              <h2>Address</h2>
+            </div>
+            <div class="box-container in2">
+              <div class="box-container name" id="mapBox">
+                <div id="map"></div>
+
+                <div class="box-container in2">
+                  <div class="box-container in2" id="addrs">
+                    <label for="address">Location</label>
+
+                    <input
+                      id="address"
+                      type="address"
+                      name = "address"
+                      placeholder="Address"
+                      class="inputbox"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h2 id="checkout-confirm-hline"></h2>
+          {% if user.is_authenticated %}
+          <button
+          style="position: relative; right: -62rem; margin-bottom: 1rem"
+          class="btn"
+          type="submit"
+          id="confirm-btn"
+        >
+          <i class="fas fa-arrow-right"></i> &nbsp &nbspConfirm &nbsp &nbsp
+        </button>
+          {% else %}
+         
+          <div style = "font-size: 1.2rem; color:red;">You need to be Logged in first to proceed Checkout.</div>
+          <button
+          style="position: relative; right: -62rem; margin-bottom: 1rem"
+          class="btn"
+          type="submit"
+          id="confirm-btn"
+          disabled
+        >
+          <i class="fas fa-arrow-right"></i> &nbsp &nbspConfirm &nbsp &nbsp
+        </button>
+          {%endif%}
+          
+
+          <h2 id="checkout-confirm-hline"></h2>
+        </div>
+      </form>
+
+      <!--cart item box starts-->
+      <div class="cart">
+      <div style="overflow-x: scroll !important;" class="cart" id="cart">
+        <div class="edit-container">
+          <h1>Your Cart</h1>
+          <button class="btn" id="editBtn">Edit</button>
+        </div>
+
+        <img
+          class="empty-cart"
+          id="empty-cart"
+          src="{% static 'core/images/empty-cart.png' %}"
+          alt="Empty Card Illustration"
+        />
+        <div>
+          <div id="cartItems"></div>
+       
+        </div>
+      </div>
+      <div class="total-price-div" id="total-amount">
+        <h2 id="cartt-hline"><span>Total Amount</span></h2>
+        <span id="amount"></span><br />
+        {% if user.is_authenticated %}
+        <button class="btn" id="checkout">
+          <i class="far fa-credit-card"></i> &nbsp &nbspCheckout
+        </button>
+        {% else %}
+       
+        <div style = "font-size: 1.2rem; color:red;">You need to be Logged in first to proceed Checkout.</div>
+        <button style = "margin-top: 0.4rem !important;  opacity: 0.4;" class="btn" id="checkout" disabled>
+          <i class="far fa-credit-card"></i> &nbsp &nbspCheckout
+        </button>
+        {%endif%}
+      </div>
+    </div>
+      
+
+      <!--cart item box ends-->
+    </div>
+    <script>
+      var menuItem = JSON.parse('{{ menuItemId | safe }}');
+     
+    </script>
+    <!--checkout section ends-->
+{% endblock %}
+ 

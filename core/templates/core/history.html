@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Samay Baji{% endblock %}
+{% block content %}
+{% block userlog %}
+{% if user.is_authenticated %}
+         
+
+<div class="btn-group">
+  <button type="button" id = "dropdown-btn" class="btn btn-active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-user" aria-hidden="true"></i>&nbsp
+{{user.email}}
+  </button>
+  <div class="dropdown-menu">
+    
+  
+    <a class="dropdown-item" href="/logout/">Logout</a>
+  </div>
+</div>
+         
+          {% else %}  
+          <button class="btn" id="loginBtn" onclick="togglePopup(),topFunction()">
+            Login
+          </button>  
+          <a class="btn register" id="registerBtn" href="{% url 'core:core-signup'%}">
+            Register
+          </a>
+      {% endif %}
+          
+
+
+
+{% endblock %}  
+
+
+<section style = "font-size:1.6rem">
+  
+
+  <div  class="modal fade" id="ordermodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div style = "padding: 0rem 1rem !important; border-radius: 20px !important; box-shadow: 0.3rem 0.5rem 0.5rem #222 !important;" class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title" style = "color:#333;" id="exampleModalLabel">Order Details</h1>
+          </button>
+        </div>
+        <div style = "color:#444;"  id ="modalcontent" class="modal-body">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" style = "color:#444; font-size: 1.6rem !important; margin-top:0 !important; padding: 0.65rem 1.2rem;" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div  class="modal fade" id="feedbackmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div style = "padding: 0rem 1rem !important; border-radius: 20px !important; box-shadow: 0.3rem 0.5rem 0.5rem #222 !important;" class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title" style = "color:#444;" id="feedbacktitle"></h1>
+          </button>
+        </div>
+        <div style = "color:#555;" class="modal-body">
+          <div class="container">
+          
+            <textarea
+              name="feedback-text"
+              id="feedback-txt"
+              cols="30"
+              rows="7"
+              class="inputbox"
+              placeholder="Feedback"
+              maxlength="400"
+              
+              required
+            ></textarea>
+            
+          
+        </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" id = "feedbacksubmitbtn" style = "color:#333; font-size: 1.6rem !important; margin-top:0 !important; padding: 0.65rem 1.2rem;" class="btn btn-secondary" data-dismiss="modal">Submit</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+    
+
+ 
+    <div class="my-3 p-3 bg-body rounded shadow-sm" style = "box-shadow: 0.25rem 0.5rem 1rem #555 !important;">
+      <h2 style = "color:#444;" class="border-bottom pb-2 mb-0">Active Orders</h2>
+      
+      {% if activedoesExist %}
+     {% for order in orderRecord %}
+     
+    {% if order.orderStatus == "Validating Order" or order.orderStatus == "En Route" %}
+    
+     
+   
+    
+      <div class="my-3 p-3 bg-body rounded shadow-sm" style = "border-radius:1.25rem !important; box-shadow: 0.15rem 0.25rem 0.5rem #888 !important;">
+        <div class="d-flex text-muted pt-3"  style = "align-content: flex-start; justify-content: space-between;">
+          <div style = "display:flex;">
+            <img src= '/media/images/{{order.orderStatus|lower|cut:" "|add:".png"}}' style = "margin-right:1.5rem;"   class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="40" height="38" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em"></text></img>
+
+            <p class="pb-3 mb-0 small lh-sm">
+                      <strong style = "font-size:1.6rem !important; " class="d-block text-gray-dark">{{order.orderStatus}}</strong>
+                    Order ID: <i>SMBOI{{order.pk}}</i> &nbsp&nbsp&nbsp&nbsp&nbsp Order By: <i>{{order.name}}  &nbsp&nbsp&nbsp&nbsp&nbsp {{order.createdAt}}</i>
+                    </p>
+          </div>
+          <div style="display:flex; align-content: flex-start;" >
+            <div   style = "margin-top: 0.8rem; margin-right: 2rem;" > <button id = "OD-{{order.pk}} " style = "color:#444;  font-size: 1.4rem !important; margin-top:0 !important; padding: 0.5rem 1.5rem;"  data-toggle="modal" data-target="#ordermodal" onclick = "orderDetail('OD-{{order.pk}}')" class="btn">Order Detail</button></div>
+            {% if order.orderStatus == "En Route" %}
+            <div  style = "margin-top: 0.8rem; margin-right: 2rem;" > <button id = "TO-{{order.pk}}" style = "color:#444; font-size: 1.4rem !important; margin-top:0 !important; padding: 0.5rem 1rem;"  class="btn">Track</button></div>
+          <div  style = "margin-top: 0.8rem; margin-right: 2rem;" > <button id = " MR-{{order.pk}}" style = "color:#444; font-size: 1.4rem !important; margin-top:0 !important; padding: 0.5rem 1.5rem;" onclick = "orderMR('MR-{{order.pk}}')" class="btn">Mark As Received</button></div>
+          {% endif %}
+         <div  style = "margin-top: 0.8rem; margin-right: 2rem;" > <button id = "CO-{{order.pk}}" style = "color:#444; font-size: 1.4rem !important; margin-top:0 !important; padding: 0.5rem 1rem;" onclick = "cancelOrder('CO-{{order.pk}}')" class="btn">Cancel</button></div>
+        </div>
+        </div>
+        
+   </div>
+{% endif %}
+{% endfor %}
+{% else %}
+<p style = "color:#888; margin: 0.8rem 0rem; " class="pb-3 mb-0 small lh-sm">
+ 
+You have no any Active Orders at the moment.
+</p>
+
+{% endif %}
+
+    </div>
+
+   
+      
+  
+  
+  
+    
+
+ 
+    <div class="my-3 p-3 bg-body rounded shadow-sm" style = "margin-top:8rem !important; box-shadow: 0.25rem 0.5rem 1rem #555 !important;">
+      <h2 style = "color:#444;" class="border-bottom pb-2 mb-0">Past Orders</h2>
+      {% if doesExist %}
+      {% for order in orderRecord %}
+      {% if order.orderStatus != "Validating Order" and order.orderStatus != "En Route"%}
+
+      <div class="my-3 p-3 bg-body rounded shadow-sm" style = "border-radius:1.25rem !important; box-shadow: 0.15rem 0.25rem 0.5rem #888 !important;">
+        <div class="d-flex text-muted pt-3" style = "align-content: flex-start; justify-content: space-between;">
+          <div style = "display:flex;">
+            <img style = "margin-right:1.5rem;" src= '/media/images/{{order.orderStatus|lower|cut:" "|add:".png"}}' class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="34" height="32" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em"></text></img>
+
+  <p class="pb-3 mb-0 small lh-sm">
+            <strong style = "font-size:1.6rem !important; " class="d-block text-gray-dark">{{order.orderStatus}}</strong>
+            Order ID: <i>SMBOI{{order.pk}}</i> &nbsp&nbsp&nbsp&nbsp&nbsp Order By: <i>{{order.name}}  &nbsp&nbsp&nbsp&nbsp&nbsp {{order.createdAt}}</i>
+          </p>
+          </div>
+          <div style="display:flex; align-content: flex-start;" >
+            <div   style = "margin-top: 0.8rem; margin-right: 2rem;" > <button style = "color:#444; font-size: 1.4rem !important; margin-top:0 !important; padding: 0.5rem 1rem;" onclick = "orderDetail('OD-{{order.pk}}')" data-toggle="modal" data-target="#ordermodal" class="btn">Order Detail</button></div>
+            <div  style = "margin-top: 0.8rem; margin-right: 2rem;" > <button id = "GF-{{order.pk}}" style = "color:#444; font-size: 1.4rem !important; margin-top:0 !important; padding: 0.5rem 1rem;" data-toggle="modal" data-target="#feedbackmodal" onclick = "idpasser('{{order.pk}}')" class="btn">Give Feedback</button></div>
+            <div style = "margin-top: 0.8rem; margin-right: 2rem;" > <button id = "DO-{{order.pk}}" style = "color:#444; font-size: 1.4rem !important; margin-top:0 !important; padding: 0.5rem 1rem;" onclick = "deleteOrder('DO-{{order.pk}}')" class="btn">Delete</button></div>
+        
+        </div>
+        </div>
+   </div>
+
+   {% endif %}
+  
+   {% endfor %}
+   {% else %}
+<p style = "color:#888; margin: 0.8rem 0rem; " class="pb-3 mb-0 small lh-sm">
+ 
+You have no any Active Orders at the moment.
+</p>
+
+{% endif %}
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</section> 
+
+
+
+
+
+
+
+
+
+{% endblock %}

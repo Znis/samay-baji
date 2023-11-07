@@ -1,0 +1,28 @@
+
+
+
+  
+    {% for menuList in menuItem %}
+   
+    
+      <div class="box" data-aos="fade-right">
+   
+      {% if menuList.isPopular %}
+      <div class="ribbon ribbon-top-left"><span>popular</span></div>
+      {% endif %}
+
+      <img src="{{menuList.image.url}}" alt="{{menuList.name}}" />
+      <h3>{{menuList.name}}</h3>
+      <div class="quantity">{{menuList.quantity}}</div>
+
+      <div class="price">{{menuList.price}}</div>
+      <form action="{% url 'core:core-order'%}">
+        <Button  class="btn" name = "addtocartbtn" id="{{menuList.idname}}">Add To Cart</Button>
+
+     </form>
+    </div>
+    {% endfor %}
+  
+
+    
+
