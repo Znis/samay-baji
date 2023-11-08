@@ -20,7 +20,7 @@ Please refer to the official [Django documentation](https://docs.djangoproject.c
 
 ## Usage
 
-The web app can be browsed in the browser after running the server. The admin panel can be accessed by the url "localhost:<PORT>/admin".
+The web app can be browsed in the browser after running the server. The admin panel can be accessed by the url "localhost:\<PORT\>/admin".
 
 
 ## Contributing
