@@ -184,11 +184,14 @@ header .logo img {
   }
 
   #loginBtn{
-    display:none;
+    margin: 0rem;
   }
   
   #registerBtn{
-    display:none;
+    margin:0rem;
+  }
+  #dropdown-btn{
+    margin: 0rem;
   }
 }
 .home::before,
